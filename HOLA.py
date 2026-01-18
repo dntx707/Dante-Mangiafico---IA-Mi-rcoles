@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 
 st.set_page_config(page_title="Mi chat de IA", page_icon="🤖")
-st.title("Cloyi")
+st.title("Bienvenido a MangiAI")
 
 MODELOS = ['llama-3.1-8b-instant', 'llama-3.3-70b-versatile', 'deepseek-r1-distill-llama-70b']
 
@@ -54,4 +54,5 @@ if mensaje:
 
 
 area_chat()
+
 
