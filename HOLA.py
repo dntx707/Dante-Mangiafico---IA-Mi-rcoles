@@ -3,6 +3,25 @@ from groq import Groq
 from datetime import datetime
 
 st.set_page_config(page_title="MangiAI", page_icon="🤖")
+
+st.markdown(
+    """
+    <style>
+    .logo-fixed {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        width: 90px;
+        opacity: 0.9;
+        z-index: 1000;
+    }
+    </style>
+
+    <img src="logomangi.png" class="logo-fixed">
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🤖 ¡Bienvenido a MangiAI!")
 st.caption("Tu asistente, a otro nivel. Siempre.")
 
@@ -95,8 +114,7 @@ if mensaje_usuario:
     with st.spinner("MangiAI está pensando..."):
         respuesta = generar_respuesta(cliente, modelo)
 
-    actualizar_historial("assistant", respuesta, "🤖")
+    actualizar_historial("assistant", respuesta, "logomangi.png")
     st.rerun()
-
 
 
