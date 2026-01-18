@@ -3,7 +3,7 @@ from groq import Groq
 
 st.set_page_config(page_title="MangiAI", page_icon="🤖")
 st.title("🤖 MangiAI")
-st.caption("Una IA que recuerda lo que hablás.")
+st.caption("Asistencia a otro nivel, 24/7.")
 
 MODELOS = [
     "llama-3.1-8b-instant",
@@ -81,4 +81,5 @@ if mensaje_usuario:
 
     actualizar_historial("assistant", respuesta, "🤖")
     st.rerun()
+
 
