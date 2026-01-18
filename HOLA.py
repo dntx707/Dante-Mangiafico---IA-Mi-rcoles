@@ -1,23 +1,31 @@
 import streamlit as st
 from groq import Groq
 from datetime import datetime
+import base64
 
 st.set_page_config(page_title="MangiAI", page_icon="🤖")
 
+def cargar_logo_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+logo_base64 = cargar_logo_base64("logomangi.png")
+
 st.markdown(
-    """
+    f"""
     <style>
-    .logo-fixed {
+    .logo-fixed {{
         position: fixed;
         top: 18px;
         right: 18px;
         width: 90px;
         opacity: 0.9;
         z-index: 1000;
-    }
+        pointer-events: none;
+    }}
     </style>
 
-    <img src="logomangi.png" class="logo-fixed">
+    <img src="data:image/png;base64,{logo_base64}" class="logo-fixed">
     """,
     unsafe_allow_html=True
 )
@@ -116,5 +124,4 @@ if mensaje_usuario:
 
     actualizar_historial("assistant", respuesta, "logomangi.png")
     st.rerun()
-
 
