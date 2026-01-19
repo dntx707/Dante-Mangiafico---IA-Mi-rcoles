@@ -62,6 +62,28 @@ st.markdown(
         color: #002b24;
         font-weight: 600;
     }}
+
+    /* -------- EMPTY STATE -------- */
+    .empty-state {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 55vh;
+        text-align: center;
+        opacity: 0.9;
+    }}
+
+    .empty-title {{
+        font-size: 2.3rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+    }}
+
+    .empty-subtitle {{
+        font-size: 1.05rem;
+        opacity: 0.7;
+    }}
     </style>
 
     <img src="data:image/png;base64,{logo_base64}" class="logo-fixed">
@@ -106,7 +128,7 @@ def obtener_contexto_actual():
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
     return (
-        "MangiAI, una IA moderna, clara y profesional creada por Dante Mangiafico. "
+        "Sos MangiAI, una IA moderna, clara y profesional creada por Dante Mangiafico. "
         "Recordás el contexto de la conversación. "
         f"{ESTILOS[estilo]} "
         + obtener_contexto_actual()
@@ -178,7 +200,16 @@ inicializar_estado()
 cliente = crear_cliente_groq()
 modelo = configurar_pagina()
 
-mostrar_historial()
+# 👉 MENSAJE CENTRAL (SOLO SI NO HAY CONVERSACIÓN)
+if len(st.session_state.mensajes) == 0:
+    st.markdown("""
+        <div class="empty-state">
+            <div class="empty-title">¿En qué te ayudo hoy?</div>
+            <div class="empty-subtitle">Elegí un estilo o escribí tu consulta</div>
+        </div>
+    """, unsafe_allow_html=True)
+else:
+    mostrar_historial()
 
 mensaje_usuario = st.chat_input("Escribe tu mensaje...")
 
@@ -192,6 +223,3 @@ if mensaje_usuario:
     actualizar_historial("assistant", respuesta, avatar)
 
     st.rerun()
-
-
-
