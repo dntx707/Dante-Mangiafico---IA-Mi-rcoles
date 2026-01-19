@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# -------------------- LOGO FIXED PREMIUM --------------------
+# -------------------- LOGO FIXED --------------------
 def cargar_logo_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -31,13 +31,36 @@ st.markdown(
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
 
-    /* Mobile */
     @media (max-width: 768px) {{
         .logo-fixed {{
             width: 95px;
             top: 12px;
             right: 12px;
         }}
+    }}
+
+    /* -------- BOTONES ESTILO RESPUESTA -------- */
+    div[data-testid="stSidebar"] button {{
+        background: transparent;
+        border: 1px solid rgba(0, 255, 170, 0.25);
+        color: #eaeaea;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        transition: all 0.15s ease;
+        text-align: left;
+    }}
+
+    div[data-testid="stSidebar"] button:hover {{
+        background: rgba(0, 255, 170, 0.15);
+        color: #ffffff;
+        transform: translateY(-1px);
+    }}
+
+    div[data-testid="stSidebar"] button:focus {{
+        background: #00ffaa;
+        color: #002b24;
+        font-weight: 600;
     }}
     </style>
 
@@ -57,27 +80,52 @@ MODELOS = [
     "deepseek-r1-distill-llama-70b"
 ]
 
-# -------------------- CONTEXTO ACTUAL --------------------
+# -------------------- ESTILOS RESPUESTA --------------------
+ESTILOS = {
+    "⚡ Directo": "Respondé de forma breve, clara y sin rodeos.",
+    "📖 Explicativo": "Respondé paso a paso, con contexto y ejemplos claros.",
+    "🎯 Estratégico": "Respondé analizando opciones, pros y contras, y recomendando.",
+    "🧑‍💼 Formal": "Respondé con tono profesional, estructurado y neutral."
+}
+
+AVATARES = {
+    "⚡ Directo": "⚡",
+    "📖 Explicativo": "📖",
+    "🎯 Estratégico": "🎯",
+    "🧑‍💼 Formal": "🧑‍💼"
+}
+
+# -------------------- CONTEXTO --------------------
 def obtener_contexto_actual():
     ahora = datetime.now()
     return (
         f"Fecha actual: {ahora.strftime('%d/%m/%Y')}. "
-        f"Hora actual: {ahora.strftime('%H:%M')}. "
-        "Respondé teniendo en cuenta que esta información es actual."
+        f"Hora actual: {ahora.strftime('%H:%M')}."
     )
 
-SYSTEM_PROMPT_BASE = (
-    "Sos MangiAI, una IA moderna, clara y profesional. "
-    "Recordás todo el contexto de la conversación. "
-    "Respondés de forma ordenada y útil. "
-    "Si el usuario pide código, explicás paso a paso. "
-    "Si pide ideas, sos creativo pero realista."
-)
+def construir_system_prompt():
+    estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
+    return (
+        "Sos MangiAI, una IA moderna, clara y profesional. "
+        "Recordás el contexto de la conversación. "
+        f"{ESTILOS[estilo]} "
+        + obtener_contexto_actual()
+    )
 
 # -------------------- SIDEBAR --------------------
 def configurar_pagina():
     st.sidebar.title("⚙️ Configuración")
-    modelo = st.sidebar.selectbox("Elige un modelo:", MODELOS)
+
+    modelo = st.sidebar.selectbox("Elegí un modelo:", MODELOS)
+
+    st.sidebar.markdown("### 🎛️ Estilo de respuesta")
+
+    if "estilo_respuesta" not in st.session_state:
+        st.session_state.estilo_respuesta = "⚡ Directo"
+
+    for estilo in ESTILOS.keys():
+        if st.sidebar.button(estilo, use_container_width=True):
+            st.session_state.estilo_respuesta = estilo
 
     if st.sidebar.button("🧹 Limpiar conversación"):
         st.session_state.mensajes = []
@@ -110,7 +158,7 @@ def mostrar_historial():
 def generar_respuesta(cliente, modelo):
     system_prompt = {
         "role": "system",
-        "content": SYSTEM_PROMPT_BASE + " " + obtener_contexto_actual()
+        "content": construir_system_prompt()
     }
 
     mensajes = [system_prompt] + [
@@ -132,15 +180,15 @@ modelo = configurar_pagina()
 
 mostrar_historial()
 
-mensaje_usuario = st.chat_input("Escribe tu mensaje...")
+mensaje_usuario = st.chat_input("Decime qué querés lograr...")
 
 if mensaje_usuario:
     actualizar_historial("user", mensaje_usuario, "🤔")
 
-    with st.spinner("MangiAI está pensando..."):
+    with st.spinner("Analizando..."):
         respuesta = generar_respuesta(cliente, modelo)
 
-    # 👇 AVATAR CORRECTO (NO LOGO)
-    actualizar_historial("assistant", respuesta, "🤖")
-    st.rerun()
+    avatar = AVATARES.get(st.session_state.estilo_respuesta, "🤖")
+    actualizar_historial("assistant", respuesta, avatar)
 
+    st.rerun()
