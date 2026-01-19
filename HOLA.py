@@ -3,6 +3,7 @@ from groq import Groq
 from datetime import datetime
 import base64
 import uuid
+import html   # 🔒 FIX DEFINITIVO
 
 # -------------------- CONFIG PÁGINA --------------------
 st.set_page_config(
@@ -224,18 +225,23 @@ def mostrar_historial():
     for mensaje in st.session_state.mensajes:
         if mensaje["role"] == "assistant":
             emoji = AVATARES.get(mensaje["estilo"], "🤖")
+            texto_seguro = html.escape(mensaje["content"])
+
             st.markdown(f"""
             <div class="chat-wrapper">
                 <div class="chat-header">
                     <div class="style-badge">{emoji}</div>
                     <button class="copy-btn"
-                        onclick="navigator.clipboard.writeText(`{mensaje['content']}`)">
+                        onclick="navigator.clipboard.writeText(this.dataset.text)">
                         📋
                     </button>
                 </div>
-                <div class="chat-message">{mensaje['content']}</div>
+                <div class="chat-message" data-text="{texto_seguro}">
+                    {texto_seguro}
+                </div>
             </div>
             """, unsafe_allow_html=True)
+
         else:
             with st.chat_message("user", avatar=mensaje["avatar"]):
                 st.markdown(mensaje["content"])
