@@ -85,6 +85,7 @@ st.markdown(
         padding: 14px;
         padding-top: 38px;
         border-radius: 12px;
+        margin-bottom: 12px;
     }}
 
     .chat-header {{
@@ -115,6 +116,16 @@ st.markdown(
     .copy-btn:hover {{
         opacity: 1;
         background: rgba(0,255,170,0.2);
+    }}
+
+    /* -------- FIX DEFINITIVO TEXTO -------- */
+    .chat-message {{
+        max-width: 100%;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.6;
+        font-size: 1rem;
     }}
     </style>
 
@@ -222,7 +233,7 @@ def mostrar_historial():
                         📋
                     </button>
                 </div>
-                <div>{mensaje['content']}</div>
+                <div class="chat-message">{mensaje['content']}</div>
             </div>
             """, unsafe_allow_html=True)
         else:
