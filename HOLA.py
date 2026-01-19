@@ -106,7 +106,7 @@ def obtener_contexto_actual():
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
     return (
-        "MangiAI, una IA moderna, clara y profesional. "
+        "MangiAI, una IA moderna, clara y profesional creada por Dante Mangiafico. "
         "Recordás el contexto de la conversación. "
         f"{ESTILOS[estilo]} "
         + obtener_contexto_actual()
@@ -192,4 +192,5 @@ if mensaje_usuario:
     actualizar_historial("assistant", respuesta, avatar)
 
     st.rerun()
+
 
