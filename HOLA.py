@@ -106,7 +106,7 @@ def obtener_contexto_actual():
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
     return (
-        "Sos MangiAI, una IA moderna, clara y profesional. "
+        "MangiAI, una IA moderna, clara y profesional. "
         "Recordás el contexto de la conversación. "
         f"{ESTILOS[estilo]} "
         + obtener_contexto_actual()
@@ -116,7 +116,7 @@ def construir_system_prompt():
 def configurar_pagina():
     st.sidebar.title("⚙️ Configuración")
 
-    modelo = st.sidebar.selectbox("Elegí un modelo:", MODELOS)
+    modelo = st.sidebar.selectbox("Elige un modelo:", MODELOS)
 
     st.sidebar.markdown("### 🎛️ Estilo de respuesta")
 
@@ -180,7 +180,7 @@ modelo = configurar_pagina()
 
 mostrar_historial()
 
-mensaje_usuario = st.chat_input("Decime qué querés lograr...")
+mensaje_usuario = st.chat_input("Escribe tu mensaje...")
 
 if mensaje_usuario:
     actualizar_historial("user", mensaje_usuario, "🤔")
@@ -192,3 +192,4 @@ if mensaje_usuario:
     actualizar_historial("assistant", respuesta, avatar)
 
     st.rerun()
+
