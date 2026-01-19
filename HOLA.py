@@ -118,7 +118,7 @@ def configurar_pagina():
 
     modelo = st.sidebar.selectbox("Elige un modelo:", MODELOS)
 
-    st.sidebar.markdown("### 🎛️ Estilo de respuesta")
+    st.sidebar.markdown("### 💬 Estilo de respuesta")
 
     if "estilo_respuesta" not in st.session_state:
         st.session_state.estilo_respuesta = "⚡ Directo"
@@ -192,5 +192,6 @@ if mensaje_usuario:
     actualizar_historial("assistant", respuesta, avatar)
 
     st.rerun()
+
 
 
