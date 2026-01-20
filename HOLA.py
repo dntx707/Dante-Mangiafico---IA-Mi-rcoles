@@ -12,12 +12,13 @@ st.set_page_config(
     layout="centered"
 )
 
-# -------------------- LOGO FIXED --------------------
+# -------------------- LOGOS --------------------
 def cargar_logo_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 logo_base64 = cargar_logo_base64("logomangi.png")
+logo_personaje_base64 = cargar_logo_base64("logopersonaje.png")
 
 st.markdown(
     f"""
@@ -27,19 +28,16 @@ st.markdown(
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-    /* -------- FONT GLOBAL -------- */
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
         font-family: 'Exo 2', -apple-system, BlinkMacSystemFont,
                      'Segoe UI', sans-serif !important;
     }}
 
-    /* -------- TITULO EN NEGRITA -------- */
     h1 {{
         font-weight: 900 !important;
     }}
 
-    /* -------- SIDEBAR ARROW (TOP LEFT) -------- */
     button[data-testid="collapsedControl"],
     button[data-testid="stSidebarCollapseButton"] {{
         position: fixed !important;
@@ -54,13 +52,6 @@ st.markdown(
         transition: all 0.2s ease !important;
     }}
 
-    button[data-testid="collapsedControl"]:hover,
-    button[data-testid="stSidebarCollapseButton"]:hover {{
-        background: rgba(0, 255, 170, 0.3) !important;
-        transform: scale(1.05) !important;
-        border-color: rgba(0, 255, 170, 0.6) !important;
-    }}
-
     button[data-testid="collapsedControl"] svg,
     button[data-testid="stSidebarCollapseButton"] svg {{
         color: #00ffaa !important;
@@ -68,7 +59,6 @@ st.markdown(
         height: 1.2rem !important;
     }}
 
-    /* -------- LOGO -------- */
     .logo-fixed {{
         position: fixed;
         top: 16px;
@@ -80,33 +70,18 @@ st.markdown(
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
 
-    @media (max-width: 768px) {{
-        .logo-fixed {{
-            width: 95px;
-            top: 12px;
-            right: 12px;
-        }}
+    .header-logo {{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 6px;
     }}
 
-    /* -------- SIDEBAR BUTTONS -------- */
-    div[data-testid="stSidebar"] button {{
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(0,255,170,0.3);
-        color: #eaeaea;
-        border-radius: 14px;
-        padding: 11px 16px;
-        margin-bottom: 8px;
-        transition: all 0.15s ease;
-        text-align: left;
-        font-weight: 500;
+    .header-logo img {{
+        width: 48px;
+        height: 48px;
     }}
 
-    div[data-testid="stSidebar"] button:hover {{
-        background: rgba(0,255,170,0.18);
-        transform: translateY(-1px);
-    }}
-
-    /* -------- EMPTY STATE -------- */
     .empty-state {{
         display: flex;
         flex-direction: column;
@@ -120,68 +95,11 @@ st.markdown(
     .empty-title {{
         font-size: 2.35rem;
         font-weight: 800;
-        letter-spacing: -0.01em;
-        margin-bottom: 0.3rem;
     }}
 
     .empty-subtitle {{
         font-size: 1.05rem;
-        font-weight: 400;
         opacity: 0.75;
-    }}
-
-    /* -------- CHAT -------- */
-    .chat-wrapper {{
-        position: relative;
-        padding: 16px;
-        padding-top: 42px;
-        border-radius: 14px;
-        margin-bottom: 14px;
-        background: rgba(255,255,255,0.02);
-    }}
-
-    .chat-header {{
-        position: absolute;
-        top: 8px;
-        left: 12px;
-        right: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }}
-
-    .style-badge {{
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        opacity: 0.9;
-    }}
-
-    .copy-btn {{
-        font-size: 0.75rem;
-        background: rgba(255,255,255,0.08);
-        border: none;
-        border-radius: 6px;
-        padding: 4px 6px;
-        cursor: pointer;
-        opacity: 0.7;
-    }}
-
-    .copy-btn:hover {{
-        opacity: 1;
-        background: rgba(0,255,170,0.25);
-    }}
-
-    .chat-message {{
-        max-width: 100%;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        line-height: 1.7;
-        font-size: 1.02rem;
-        font-weight: 400;
     }}
     </style>
 
@@ -191,7 +109,15 @@ st.markdown(
 )
 
 # -------------------- HEADER --------------------
-st.title("🤖¡Bienvenido a MangiAI!")
+st.markdown(
+    f"""
+    <div class="header-logo">
+        <img src="data:image/png;base64,{logo_personaje_base64}">
+        <h1>¡Bienvenido a MangiAI!</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 st.caption("Tu asistente inteligente, elevado al siguiente nivel. Siempre.")
 
 # -------------------- MODELOS --------------------
@@ -284,14 +210,8 @@ def mostrar_historial():
             <div class="chat-wrapper">
                 <div class="chat-header">
                     <div class="style-badge">{emoji} {nombre}</div>
-                    <button class="copy-btn"
-                        onclick="navigator.clipboard.writeText(this.dataset.text)">
-                        📋
-                    </button>
                 </div>
-                <div class="chat-message" data-text="{texto_seguro}">
-                    {texto_seguro}
-                </div>
+                <div class="chat-message">{texto_seguro}</div>
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -346,7 +266,3 @@ if mensaje_usuario:
     )
 
     st.rerun()
-
-
-
-
