@@ -38,7 +38,7 @@ st.markdown(
         margin: 0;
     }}
 
-    /* -------- LOGO FIJO SUPERIOR -------- */
+    /* -------- LOGO FIJO -------- */
     .logo-fixed {{
         position: fixed;
         top: 16px;
@@ -50,30 +50,26 @@ st.markdown(
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
 
-    /* -------- HEADER -------- */
+    /* -------- HEADER VERTICAL -------- */
     .header-wrapper {{
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 25px;
-        margin-bottom: 20px;
         text-align: center;
-    }}
-
-    .header-logo {{
-        display: flex;
-        align-items: center;
-        gap: 18px;
+        margin-top: 30px;
+        margin-bottom: 22px;
     }}
 
     .header-logo img {{
-        width: 118px;
-        height: 118px;
+        width: 145px;   /* 🔥 logo más grande */
+        height: 145px;
+        margin-bottom: 14px;
     }}
 
-    .header-logo h1 {{
-        font-size: 2.75rem;
+    .header-title {{
+        font-size: 2.8rem;
         line-height: 1.1;
+        font-weight: 900;
     }}
 
     .header-subtitle {{
@@ -115,8 +111,8 @@ st.markdown(
     <div class="header-wrapper">
         <div class="header-logo">
             <img src="data:image/png;base64,{logo_header_base64}">
-            <h1>¡Bienvenido a MangiAI!</h1>
         </div>
+        <div class="header-title">¡Bienvenido a MangiAI!</div>
         <div class="header-subtitle">
             Tu asistente inteligente, elevado al siguiente nivel. Siempre.
         </div>
