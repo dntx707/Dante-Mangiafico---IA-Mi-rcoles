@@ -8,7 +8,7 @@ import html
 # -------------------- CONFIG PÁGINA --------------------
 st.set_page_config(
     page_title="MangiAI",
-    page_icon="logofinal.png",
+    page_icon="logodefinitivo2.png",
     layout="centered"
 )
 
@@ -18,7 +18,7 @@ def cargar_logo_base64(path):
         return base64.b64encode(f.read()).decode()
 
 logo_fijo_base64 = cargar_logo_base64("logomangi.png")
-logo_final_base64 = cargar_logo_base64("logofinal.png")
+logo_definitivo_base64 = cargar_logo_base64("logodefinitivo2.png")
 
 # -------------------- ESTILOS GLOBALES --------------------
 st.markdown(
@@ -99,7 +99,7 @@ st.markdown(
 st.markdown(
     f"""
     <div class="header-logo">
-        <img src="data:image/png;base64,{logo_final_base64}">
+        <img src="data:image/png;base64,{logo_definitivo_base64}">
         <h1>¡Bienvenido a MangiAI!</h1>
     </div>
     """,
