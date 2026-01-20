@@ -21,16 +21,16 @@ logo_base64 = cargar_logo_base64("logomangi.png")
 
 st.markdown(
     f"""
-    <!-- GOOGLE FONT : SPACE GROTESK -->
+    <!-- GOOGLE FONT : POPPINS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
     /* -------- FONT GLOBAL -------- */
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
-        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont,
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont,
                      'Segoe UI', sans-serif !important;
     }}
 
