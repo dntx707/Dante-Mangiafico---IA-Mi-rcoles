@@ -3,7 +3,7 @@ from groq import Groq
 from datetime import datetime
 import base64
 import uuid
-import html  # 🔒 FIX DEFINITIVO
+import html
 
 # -------------------- CONFIG PÁGINA --------------------
 st.set_page_config(
@@ -21,17 +21,34 @@ logo_base64 = cargar_logo_base64("logomangi.png")
 
 st.markdown(
     f"""
-    <!-- GOOGLE FONT -->
+    <!-- GOOGLE FONT : EXO 2 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
     /* -------- FONT GLOBAL -------- */
-    html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6, 
+    html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+        font-family: 'Exo 2', -apple-system, BlinkMacSystemFont,
                      'Segoe UI', sans-serif !important;
+    }}
+
+    /* -------- SIDEBAR ARROW FIX -------- */
+    button[data-testid="collapsedControl"] {{
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        z-index: 1000;
+        background: rgba(255,255,255,0.08);
+        border-radius: 10px;
+        padding: 6px 8px;
+        border: 1px solid rgba(0,255,170,0.35);
+    }}
+
+    button[data-testid="collapsedControl"]:hover {{
+        background: rgba(0,255,170,0.25);
+        transform: scale(1.05);
     }}
 
     /* -------- LOGO -------- */
@@ -56,11 +73,11 @@ st.markdown(
 
     /* -------- SIDEBAR BUTTONS -------- */
     div[data-testid="stSidebar"] button {{
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(0,255,170,0.25);
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(0,255,170,0.3);
         color: #eaeaea;
-        border-radius: 12px;
-        padding: 10px 14px;
+        border-radius: 14px;
+        padding: 11px 16px;
         margin-bottom: 8px;
         transition: all 0.15s ease;
         text-align: left;
@@ -68,7 +85,7 @@ st.markdown(
     }}
 
     div[data-testid="stSidebar"] button:hover {{
-        background: rgba(0,255,170,0.15);
+        background: rgba(0,255,170,0.18);
         transform: translateY(-1px);
     }}
 
@@ -84,9 +101,9 @@ st.markdown(
     }}
 
     .empty-title {{
-        font-size: 2.4rem;
+        font-size: 2.35rem;
         font-weight: 800;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         margin-bottom: 0.3rem;
     }}
 
@@ -99,25 +116,30 @@ st.markdown(
     /* -------- CHAT -------- */
     .chat-wrapper {{
         position: relative;
-        padding: 14px;
-        padding-top: 38px;
-        border-radius: 12px;
-        margin-bottom: 12px;
+        padding: 16px;
+        padding-top: 42px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        background: rgba(255,255,255,0.02);
     }}
 
     .chat-header {{
         position: absolute;
-        top: 6px;
-        left: 8px;
-        right: 8px;
+        top: 8px;
+        left: 12px;
+        right: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }}
 
     .style-badge {{
-        font-size: 0.9rem;
-        opacity: 0.85;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        opacity: 0.9;
     }}
 
     .copy-btn {{
@@ -132,7 +154,7 @@ st.markdown(
 
     .copy-btn:hover {{
         opacity: 1;
-        background: rgba(0,255,170,0.2);
+        background: rgba(0,255,170,0.25);
     }}
 
     .chat-message {{
@@ -140,8 +162,8 @@ st.markdown(
         white-space: pre-wrap;
         word-wrap: break-word;
         overflow-wrap: break-word;
-        line-height: 1.65;
-        font-size: 1rem;
+        line-height: 1.7;
+        font-size: 1.02rem;
         font-weight: 400;
     }}
     </style>
@@ -152,8 +174,8 @@ st.markdown(
 )
 
 # -------------------- HEADER --------------------
-st.title("🤖 ¡Bienvenido a MangiAI!")
-st.caption("Tu asistente, a otro nivel. Siempre.")
+st.title("🤖 MangiAI")
+st.caption("Tu asistente inteligente, elevado al siguiente nivel.")
 
 # -------------------- MODELOS --------------------
 MODELOS = [
@@ -177,23 +199,22 @@ ESTILOS = {
 }
 
 AVATARES = {
-    "⚡ Directo": "⚡",
-    "📖 Explicativo": "📖",
-    "🎯 Estratégico": "🎯",
-    "🧑‍💼 Formal": "🧑‍💼",
-    "💻 Código": "💻"
+    "⚡ Directo": ("⚡", "Directo"),
+    "📖 Explicativo": ("📖", "Explicativo"),
+    "🎯 Estratégico": ("🎯", "Estratégico"),
+    "🧑‍💼 Formal": ("🧑‍💼", "Formal"),
+    "💻 Código": ("💻", "Código")
 }
 
 # -------------------- CONTEXTO --------------------
 def obtener_contexto_actual():
     ahora = datetime.now()
-    return f"Fecha: {ahora.strftime('%d/%m/%Y')} | Hora: {ahora.strftime('%H:%M')}"
+    return f"{ahora.strftime('%d/%m/%Y %H:%M')}"
 
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
     return (
         "Sos MangiAI, una IA moderna y profesional creada por Dante Mangiafico. "
-        "Recordás el contexto de la conversación. "
         f"{ESTILOS[estilo]} "
         + obtener_contexto_actual()
     )
@@ -201,7 +222,7 @@ def construir_system_prompt():
 # -------------------- SIDEBAR --------------------
 def configurar_pagina():
     st.sidebar.title("⚙️ Configuración")
-    modelo = st.sidebar.selectbox("Elegí un modelo:", MODELOS)
+    modelo = st.sidebar.selectbox("Modelo:", MODELOS)
 
     st.sidebar.markdown("### 💬 Estilo de respuesta")
 
@@ -239,13 +260,13 @@ def actualizar_historial(rol, contenido, avatar, estilo=None):
 def mostrar_historial():
     for mensaje in st.session_state.mensajes:
         if mensaje["role"] == "assistant":
-            emoji = AVATARES.get(mensaje["estilo"], "🤖")
+            emoji, nombre = AVATARES.get(mensaje["estilo"], ("🤖", "MangiAI"))
             texto_seguro = html.escape(mensaje["content"])
 
             st.markdown(f"""
             <div class="chat-wrapper">
                 <div class="chat-header">
-                    <div class="style-badge">{emoji}</div>
+                    <div class="style-badge">{emoji} {nombre}</div>
                     <button class="copy-btn"
                         onclick="navigator.clipboard.writeText(this.dataset.text)">
                         📋
@@ -262,12 +283,7 @@ def mostrar_historial():
 
 # -------------------- RESPUESTA IA --------------------
 def generar_respuesta(cliente, modelo):
-    system_prompt = {
-        "role": "system",
-        "content": construir_system_prompt()
-    }
-
-    mensajes = [system_prompt] + [
+    mensajes = [{"role": "system", "content": construir_system_prompt()}] + [
         {"role": m["role"], "content": m["content"]}
         for m in st.session_state.mensajes
     ]
@@ -303,7 +319,7 @@ if mensaje_usuario:
         respuesta = generar_respuesta(cliente, modelo)
 
     estilo_actual = st.session_state.estilo_respuesta
-    avatar = AVATARES.get(estilo_actual, "🤖")
+    avatar = AVATARES.get(estilo_actual, ("🤖", ""))[0]
 
     actualizar_historial(
         "assistant",
