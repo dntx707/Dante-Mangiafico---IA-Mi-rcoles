@@ -25,17 +25,12 @@ st.markdown(
     f"""
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
         font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-    }}
-
-    h1 {{
-        font-weight: 900;
-        margin: 0;
     }}
 
     /* -------- LOGO FIJO -------- */
@@ -50,22 +45,34 @@ st.markdown(
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
 
-    /* -------- HEADER -------- */
+    /* -------- HEADER ARMÓNICO -------- */
     .header-logo {{
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 20px;
-        margin-bottom: 6px;
+        gap: 14px;
+        margin-top: 36px;
+        margin-bottom: 46px;
+        text-align: center;
     }}
 
     .header-logo img {{
-        width: 110px;
-        height: 110px;
+        width: 92px;
+        height: 92px;
     }}
 
     .header-logo h1 {{
-        font-size: 2.7rem;
-        line-height: 1.1;
+        font-size: 2.9rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin: 0;
+    }}
+
+    .header-subtitle {{
+        font-size: 1.05rem;
+        opacity: 0.75;
+        margin-top: -6px;
     }}
 
     /* -------- EMPTY STATE -------- */
@@ -74,13 +81,13 @@ st.markdown(
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 55vh;
+        height: 50vh;
         text-align: center;
         opacity: 0.95;
     }}
 
     .empty-title {{
-        font-size: 2.35rem;
+        font-size: 2.4rem;
         font-weight: 800;
     }}
 
@@ -101,12 +108,13 @@ st.markdown(
     <div class="header-logo">
         <img src="data:image/png;base64,{logo_definitivo_base64}">
         <h1>¡Bienvenido a MangiAI!</h1>
+        <div class="header-subtitle">
+            Tu asistente inteligente, elevado al siguiente nivel. Siempre.
+        </div>
     </div>
     """,
     unsafe_allow_html=True
 )
-
-st.caption("Tu asistente inteligente, elevado al siguiente nivel. Siempre.")
 
 # -------------------- MODELOS --------------------
 MODELOS = [
