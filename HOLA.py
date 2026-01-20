@@ -21,46 +21,38 @@ logo_base64 = cargar_logo_base64("logomangi.png")
 
 st.markdown(
     f"""
-    <!-- GOOGLE FONT : ROBOTO -->
+    <!-- GOOGLE FONT : EXO 2 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
     /* -------- FONT GLOBAL -------- */
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
-        font-family: 'Roboto', -apple-system, BlinkMacSystemFont,
+        font-family: 'Exo 2', -apple-system, BlinkMacSystemFont,
                      'Segoe UI', sans-serif !important;
     }}
 
-    /* -------- SIDEBAR ARROW (TOP LEFT) -------- */
+    /* -------- SIDEBAR ARROW FIX (TOP LEFT) -------- */
     button[data-testid="collapsedControl"],
     button[data-testid="stSidebarCollapseButton"] {{
         position: fixed !important;
         top: 14px !important;
         left: 14px !important;
         z-index: 9999 !important;
-        background: rgba(0, 255, 170, 0.15) !important;
+
+        background: rgba(255,255,255,0.08) !important;
         border-radius: 10px !important;
-        padding: 8px 10px !important;
-        border: 1px solid rgba(0, 255, 170, 0.4) !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
-        transition: all 0.2s ease !important;
+        padding: 6px 8px !important;
+        border: 1px solid rgba(0,255,170,0.35) !important;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
     }}
 
     button[data-testid="collapsedControl"]:hover,
     button[data-testid="stSidebarCollapseButton"]:hover {{
-        background: rgba(0, 255, 170, 0.3) !important;
-        transform: scale(1.05) !important;
-        border-color: rgba(0, 255, 170, 0.6) !important;
-    }}
-
-    button[data-testid="collapsedControl"] svg,
-    button[data-testid="stSidebarCollapseButton"] svg {{
-        color: #00ffaa !important;
-        width: 1.2rem !important;
-        height: 1.2rem !important;
+        background: rgba(0,255,170,0.25) !important;
+        transform: scale(1.05);
     }}
 
     /* -------- LOGO -------- */
