@@ -192,7 +192,7 @@ st.markdown(
 
 # -------------------- HEADER --------------------
 st.title("🤖¡Bienvenido a MangiAI!")
-st.caption("Tu asistente inteligente, elevado al siguiente nivel.")
+st.caption("Tu asistente inteligente, elevado al siguiente nivel. Siempre.")
 
 # -------------------- MODELOS --------------------
 MODELOS = [
@@ -346,3 +346,4 @@ if mensaje_usuario:
     )
 
     st.rerun()
+
