@@ -21,16 +21,16 @@ logo_base64 = cargar_logo_base64("logomangi.png")
 
 st.markdown(
     f"""
-    <!-- GOOGLE FONT : POPPINS -->
+    <!-- GOOGLE FONT : ROBOTO -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
     /* -------- FONT GLOBAL -------- */
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
-        font-family: 'Poppins', -apple-system, BlinkMacSystemFont,
+        font-family: 'Roboto', -apple-system, BlinkMacSystemFont,
                      'Segoe UI', sans-serif !important;
     }}
 
