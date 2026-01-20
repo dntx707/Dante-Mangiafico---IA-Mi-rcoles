@@ -33,28 +33,6 @@ st.markdown(
                      'Segoe UI', sans-serif !important;
     }}
 
-    /* -------- FLECHA SIDEBAR (FIX DEFINITIVO) -------- */
-    button[data-testid="collapsedControl"],
-    button[data-testid="stSidebarCollapseButton"] {{
-        position: fixed !important;
-        top: 12px !important;
-        left: 12px !important;
-        z-index: 10000 !important;
-
-        background: rgba(255,255,255,0.08) !important;
-        border-radius: 10px !important;
-        padding: 6px 8px !important;
-        border: 1px solid rgba(0,255,170,0.4) !important;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-        backdrop-filter: blur(6px);
-    }}
-
-    button[data-testid="collapsedControl"]:hover,
-    button[data-testid="stSidebarCollapseButton"]:hover {{
-        background: rgba(0,255,170,0.25) !important;
-        transform: scale(1.06);
-    }}
-
     /* -------- LOGO FIXED -------- */
     .logo-fixed {{
         position: fixed;
@@ -188,9 +166,7 @@ ESTILOS = {
     "💻 Código": "Respondé como programador senior. Código limpio y sin explicación."
 }
 
-AVATARES = {
-    k: (k.split()[0], k.split()[1]) for k in ESTILOS
-}
+AVATARES = {k: (k.split()[0], k.split()[1]) for k in ESTILOS}
 
 # -------------------- CONTEXTO --------------------
 def construir_system_prompt():
