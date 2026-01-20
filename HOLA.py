@@ -17,12 +17,12 @@ def cargar_logo_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-logo_base64 = cargar_logo_base64("logomangi.png")
+logo_fijo_base64 = cargar_logo_base64("logomangi.png")
 logo_personaje_base64 = cargar_logo_base64("logopersonaje.png")
 
+# -------------------- ESTILOS GLOBALES --------------------
 st.markdown(
     f"""
-    <!-- GOOGLE FONT : EXO 2 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,44 +30,22 @@ st.markdown(
     <style>
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
-        font-family: 'Exo 2', -apple-system, BlinkMacSystemFont,
-                     'Segoe UI', sans-serif !important;
+        font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     }}
 
     h1 {{
-        font-weight: 900 !important;
+        font-weight: 900;
         margin: 0;
     }}
 
-    /* -------- SIDEBAR ARROW -------- */
-    button[data-testid="collapsedControl"],
-    button[data-testid="stSidebarCollapseButton"] {{
-        position: fixed !important;
-        top: 14px !important;
-        left: 14px !important;
-        z-index: 9999 !important;
-        background: rgba(0, 255, 170, 0.15) !important;
-        border-radius: 10px !important;
-        padding: 8px 10px !important;
-        border: 1px solid rgba(0, 255, 170, 0.4) !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
-    }}
-
-    button[data-testid="collapsedControl"] svg,
-    button[data-testid="stSidebarCollapseButton"] svg {{
-        color: #00ffaa !important;
-        width: 1.2rem !important;
-        height: 1.2rem !important;
-    }}
-
-    /* -------- LOGO FIXED (TOP RIGHT) -------- */
+    /* -------- LOGO FIJO -------- */
     .logo-fixed {{
         position: fixed;
         top: 16px;
         right: 16px;
         width: 130px;
-        opacity: 0.95;
         z-index: 999;
+        opacity: 0.95;
         pointer-events: none;
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
@@ -76,17 +54,17 @@ st.markdown(
     .header-logo {{
         display: flex;
         align-items: center;
-        gap: 18px;
-        margin-bottom: 4px;
+        gap: 20px;
+        margin-bottom: 6px;
     }}
 
     .header-logo img {{
-        width: 72px;
-        height: 72px;
+        width: 96px;
+        height: 96px;
     }}
 
     .header-logo h1 {{
-        font-size: 2.4rem;
+        font-size: 2.6rem;
         line-height: 1.1;
     }}
 
@@ -112,7 +90,7 @@ st.markdown(
     }}
     </style>
 
-    <img src="data:image/png;base64,{logo_base64}" class="logo-fixed">
+    <img src="data:image/png;base64,{logo_fijo_base64}" class="logo-fixed">
     """,
     unsafe_allow_html=True
 )
@@ -127,6 +105,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 st.caption("Tu asistente inteligente, elevado al siguiente nivel. Siempre.")
 
 # -------------------- MODELOS --------------------
@@ -161,7 +140,7 @@ AVATARES = {
 # -------------------- CONTEXTO --------------------
 def obtener_contexto_actual():
     ahora = datetime.now()
-    return f"{ahora.strftime('%d/%m/%Y %H:%M')}"
+    return ahora.strftime("%d/%m/%Y %H:%M")
 
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
@@ -172,7 +151,7 @@ def construir_system_prompt():
     )
 
 # -------------------- SIDEBAR --------------------
-def configurar_pagina():
+def configurar_sidebar():
     st.sidebar.title("⚙️ Configuración")
     modelo = st.sidebar.selectbox("Modelo:", MODELOS)
 
@@ -191,7 +170,7 @@ def configurar_pagina():
 
     return modelo
 
-# -------------------- GROQ CLIENT --------------------
+# -------------------- GROQ --------------------
 def crear_cliente_groq():
     return Groq(api_key=st.secrets["CLAVE_API"])
 
@@ -209,10 +188,34 @@ def actualizar_historial(rol, contenido, avatar, estilo=None):
         "estilo": estilo
     })
 
+def mostrar_historial():
+    for m in st.session_state.mensajes:
+        if m["role"] == "assistant":
+            emoji, nombre = AVATARES.get(m["estilo"], ("🤖", "MangiAI"))
+            texto = html.escape(m["content"])
+            st.markdown(f"**{emoji} {nombre}**\n\n{texto}")
+        else:
+            with st.chat_message("user", avatar=m["avatar"]):
+                st.markdown(m["content"])
+
+# -------------------- RESPUESTA IA (FIX) --------------------
+def generar_respuesta(cliente, modelo):
+    mensajes = [{"role": "system", "content": construir_system_prompt()}] + [
+        {"role": m["role"], "content": m["content"]}
+        for m in st.session_state.mensajes
+    ]
+
+    r = cliente.chat.completions.create(
+        model=modelo,
+        messages=mensajes
+    )
+
+    return r.choices[0].message.content
+
 # -------------------- APP --------------------
 inicializar_estado()
 cliente = crear_cliente_groq()
-modelo = configurar_pagina()
+modelo = configurar_sidebar()
 
 if not st.session_state.mensajes:
     st.markdown("""
@@ -221,16 +224,25 @@ if not st.session_state.mensajes:
             <div class="empty-subtitle">Elegí un estilo o escribí tu consulta</div>
         </div>
     """, unsafe_allow_html=True)
+else:
+    mostrar_historial()
 
 mensaje_usuario = st.chat_input("Escribí tu mensaje...")
 
 if mensaje_usuario:
     actualizar_historial("user", mensaje_usuario, "🤔")
+
     with st.spinner("Analizando..."):
         respuesta = generar_respuesta(cliente, modelo)
 
     estilo_actual = st.session_state.estilo_respuesta
     avatar = AVATARES.get(estilo_actual, ("🤖", ""))[0]
 
-    actualizar_historial("assistant", respuesta, avatar, estilo=estilo_actual)
+    actualizar_historial(
+        "assistant",
+        respuesta,
+        avatar,
+        estilo=estilo_actual
+    )
+
     st.rerun()
