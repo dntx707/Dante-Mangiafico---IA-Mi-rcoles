@@ -18,7 +18,7 @@ def cargar_logo_base64(path):
         return base64.b64encode(f.read()).decode()
 
 logo_fijo_base64 = cargar_logo_base64("logomangi.png")
-logo_definitivo_base64 = cargar_logo_base64("logodefinitivo2.png")
+logo_header_base64 = cargar_logo_base64("logodefinitivo2.png")
 
 # -------------------- ESTILOS GLOBALES --------------------
 st.markdown(
@@ -33,7 +33,12 @@ st.markdown(
         font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     }}
 
-    /* -------- LOGO FIJO -------- */
+    h1 {{
+        font-weight: 900;
+        margin: 0;
+    }}
+
+    /* -------- LOGO FIJO SUPERIOR -------- */
     .logo-fixed {{
         position: fixed;
         top: 16px;
@@ -45,34 +50,36 @@ st.markdown(
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
 
-    /* -------- HEADER ARMÓNICO -------- */
-    .header-logo {{
+    /* -------- HEADER -------- */
+    .header-wrapper {{
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 14px;
-        margin-top: 36px;
-        margin-bottom: 46px;
+        margin-top: 25px;
+        margin-bottom: 20px;
         text-align: center;
     }}
 
+    .header-logo {{
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }}
+
     .header-logo img {{
-        width: 92px;
-        height: 92px;
+        width: 118px;
+        height: 118px;
     }}
 
     .header-logo h1 {{
-        font-size: 2.9rem;
-        font-weight: 900;
-        letter-spacing: -0.02em;
-        line-height: 1.15;
-        margin: 0;
+        font-size: 2.75rem;
+        line-height: 1.1;
     }}
 
     .header-subtitle {{
+        margin-top: 6px;
         font-size: 1.05rem;
         opacity: 0.75;
-        margin-top: -6px;
     }}
 
     /* -------- EMPTY STATE -------- */
@@ -81,13 +88,13 @@ st.markdown(
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 50vh;
+        height: 55vh;
         text-align: center;
         opacity: 0.95;
     }}
 
     .empty-title {{
-        font-size: 2.4rem;
+        font-size: 2.35rem;
         font-weight: 800;
     }}
 
@@ -105,9 +112,11 @@ st.markdown(
 # -------------------- HEADER --------------------
 st.markdown(
     f"""
-    <div class="header-logo">
-        <img src="data:image/png;base64,{logo_definitivo_base64}">
-        <h1>¡Bienvenido a MangiAI!</h1>
+    <div class="header-wrapper">
+        <div class="header-logo">
+            <img src="data:image/png;base64,{logo_header_base64}">
+            <h1>¡Bienvenido a MangiAI!</h1>
+        </div>
         <div class="header-subtitle">
             Tu asistente inteligente, elevado al siguiente nivel. Siempre.
         </div>
@@ -225,12 +234,15 @@ cliente = crear_cliente_groq()
 modelo = configurar_sidebar()
 
 if not st.session_state.mensajes:
-    st.markdown("""
+    st.markdown(
+        """
         <div class="empty-state">
             <div class="empty-title">¿En qué te ayudo hoy?</div>
             <div class="empty-subtitle">Elegí un estilo o escribí tu consulta</div>
         </div>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 else:
     mostrar_historial()
 
