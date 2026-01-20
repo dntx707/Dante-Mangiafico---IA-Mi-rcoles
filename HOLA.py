@@ -8,7 +8,7 @@ import html
 # -------------------- CONFIG PÁGINA --------------------
 st.set_page_config(
     page_title="MangiAI",
-    page_icon="logopersonaje.png",
+    page_icon="logobot.png",
     layout="centered"
 )
 
@@ -18,7 +18,7 @@ def cargar_logo_base64(path):
         return base64.b64encode(f.read()).decode()
 
 logo_fijo_base64 = cargar_logo_base64("logomangi.png")
-logo_personaje_base64 = cargar_logo_base64("logopersonaje.png")
+logo_bot_base64 = cargar_logo_base64("logobot.png")
 
 # -------------------- ESTILOS GLOBALES --------------------
 st.markdown(
@@ -43,7 +43,7 @@ st.markdown(
         position: fixed;
         top: 16px;
         right: 16px;
-        width: 130px;
+        width: 150px;
         z-index: 999;
         opacity: 0.95;
         pointer-events: none;
@@ -59,12 +59,12 @@ st.markdown(
     }}
 
     .header-logo img {{
-        width: 96px;
-        height: 96px;
+        width: 110px;
+        height: 110px;
     }}
 
     .header-logo h1 {{
-        font-size: 2.6rem;
+        font-size: 2.7rem;
         line-height: 1.1;
     }}
 
@@ -99,7 +99,7 @@ st.markdown(
 st.markdown(
     f"""
     <div class="header-logo">
-        <img src="data:image/png;base64,{logo_personaje_base64}">
+        <img src="data:image/png;base64,{logo_bot_base64}">
         <h1>¡Bienvenido a MangiAI!</h1>
     </div>
     """,
@@ -139,8 +139,7 @@ AVATARES = {
 
 # -------------------- CONTEXTO --------------------
 def obtener_contexto_actual():
-    ahora = datetime.now()
-    return ahora.strftime("%d/%m/%Y %H:%M")
+    return datetime.now().strftime("%d/%m/%Y %H:%M")
 
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
@@ -198,7 +197,7 @@ def mostrar_historial():
             with st.chat_message("user", avatar=m["avatar"]):
                 st.markdown(m["content"])
 
-# -------------------- RESPUESTA IA (FIX) --------------------
+# -------------------- RESPUESTA IA --------------------
 def generar_respuesta(cliente, modelo):
     mensajes = [{"role": "system", "content": construir_system_prompt()}] + [
         {"role": m["role"], "content": m["content"]}
@@ -246,3 +245,4 @@ if mensaje_usuario:
     )
 
     st.rerun()
+
