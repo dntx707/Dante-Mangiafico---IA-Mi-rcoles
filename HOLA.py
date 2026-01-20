@@ -12,6 +12,18 @@ st.set_page_config(
     layout="centered"
 )
 
+# -------------------- OCULTAR HEADER KEYBOARD --------------------
+st.html("""
+<style>
+    header {visibility: hidden;}
+    header::before {content: ''; display: block;}
+    header::after {content: ''; display: block;}
+    [data-testid="stHeader"] {display: none !important;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+</style>
+""")
+
 # -------------------- LOGO FIXED --------------------
 def cargar_logo_base64(path):
     with open(path, "rb") as f:
@@ -34,22 +46,22 @@ st.markdown(
                      'Segoe UI', sans-serif !important;
     }}
 
-    /* -------- OCULTAR SIDEBAR COLLAPSE BUTTON Y TEXTO -------- */
-    button[data-testid="collapsedControl"],
-    button[data-testid="stSidebarCollapseButton"],
-    [data-testid="collapsedControl"],
-    section[data-testid="stSidebar"] > div:first-child > button {{
-        display: none !important;
+    /* -------- OCULTAR HEADER Y KEYBOARD -------- */
+    header {{
         visibility: hidden !important;
-        opacity: 0 !important;
-        width: 0 !important;
+        display: none !important;
         height: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
     }}
+    
+    [data-testid="stHeader"] {{
+        display: none !important;
+    }}
 
-    /* -------- OCULTAR CUALQUIER TEXTO EN TOP LEFT -------- */
-    .css-1v0mbdj {{
+    /* -------- OCULTAR SIDEBAR COLLAPSE BUTTON -------- */
+    button[data-testid="collapsedControl"],
+    button[data-testid="stSidebarCollapseButton"] {{
         display: none !important;
     }}
 
