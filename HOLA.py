@@ -34,21 +34,29 @@ st.markdown(
                      'Segoe UI', sans-serif !important;
     }}
 
-    /* -------- SIDEBAR ARROW FIX -------- */
-    button[data-testid="collapsedControl"] {{
-        position: fixed;
-        top: 14px;
-        left: 14px;
-        z-index: 1000;
-        background: rgba(255,255,255,0.08);
-        border-radius: 10px;
-        padding: 6px 8px;
-        border: 1px solid rgba(0,255,170,0.35);
+    /* -------- SIDEBAR COLLAPSE BUTTON FIX -------- */
+    [data-testid="collapsedControl"] {{
+        position: fixed !important;
+        top: 0.5rem !important;
+        left: 0.5rem !important;
+        z-index: 999999 !important;
+        background: rgba(0, 255, 170, 0.15) !important;
+        border: 1px solid rgba(0, 255, 170, 0.4) !important;
+        border-radius: 8px !important;
+        padding: 0.5rem !important;
+        transition: all 0.2s ease !important;
     }}
 
-    button[data-testid="collapsedControl"]:hover {{
-        background: rgba(0,255,170,0.25);
-        transform: scale(1.05);
+    [data-testid="collapsedControl"]:hover {{
+        background: rgba(0, 255, 170, 0.3) !important;
+        transform: scale(1.08) !important;
+        border-color: rgba(0, 255, 170, 0.6) !important;
+    }}
+
+    [data-testid="collapsedControl"] svg {{
+        color: #00ffaa !important;
+        width: 1.2rem !important;
+        height: 1.2rem !important;
     }}
 
     /* -------- LOGO -------- */
@@ -58,7 +66,7 @@ st.markdown(
         right: 16px;
         width: 130px;
         opacity: 0.95;
-        z-index: 999;
+        z-index: 998;
         pointer-events: none;
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
@@ -71,22 +79,37 @@ st.markdown(
         }}
     }}
 
+    /* -------- SIDEBAR STYLING -------- */
+    [data-testid="stSidebar"] {{
+        background: linear-gradient(180deg, 
+            rgba(0, 30, 30, 0.95) 0%, 
+            rgba(0, 20, 20, 0.98) 100%);
+    }}
+
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h1 {{
+        color: #00ffaa;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }}
+
     /* -------- SIDEBAR BUTTONS -------- */
     div[data-testid="stSidebar"] button {{
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(0,255,170,0.3);
-        color: #eaeaea;
-        border-radius: 14px;
-        padding: 11px 16px;
-        margin-bottom: 8px;
-        transition: all 0.15s ease;
-        text-align: left;
-        font-weight: 500;
+        background: rgba(255,255,255,0.03) !important;
+        border: 1px solid rgba(0,255,170,0.3) !important;
+        color: #eaeaea !important;
+        border-radius: 14px !important;
+        padding: 11px 16px !important;
+        margin-bottom: 8px !important;
+        transition: all 0.15s ease !important;
+        text-align: left !important;
+        font-weight: 500 !important;
+        width: 100% !important;
     }}
 
     div[data-testid="stSidebar"] button:hover {{
-        background: rgba(0,255,170,0.18);
-        transform: translateY(-1px);
+        background: rgba(0,255,170,0.18) !important;
+        transform: translateY(-1px) !important;
+        border-color: rgba(0,255,170,0.5) !important;
     }}
 
     /* -------- EMPTY STATE -------- */
@@ -105,12 +128,17 @@ st.markdown(
         font-weight: 800;
         letter-spacing: -0.01em;
         margin-bottom: 0.3rem;
+        background: linear-gradient(135deg, #00ffaa 0%, #00cc88 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }}
 
     .empty-subtitle {{
         font-size: 1.05rem;
         font-weight: 400;
         opacity: 0.75;
+        color: #b0b0b0;
     }}
 
     /* -------- CHAT -------- */
@@ -121,6 +149,13 @@ st.markdown(
         border-radius: 14px;
         margin-bottom: 14px;
         background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(0,255,170,0.1);
+        transition: all 0.2s ease;
+    }}
+
+    .chat-wrapper:hover {{
+        background: rgba(255,255,255,0.04);
+        border-color: rgba(0,255,170,0.2);
     }}
 
     .chat-header {{
@@ -140,6 +175,7 @@ st.markdown(
         font-size: 0.95rem;
         font-weight: 600;
         opacity: 0.9;
+        color: #00ffaa;
     }}
 
     .copy-btn {{
@@ -147,9 +183,10 @@ st.markdown(
         background: rgba(255,255,255,0.08);
         border: none;
         border-radius: 6px;
-        padding: 4px 6px;
+        padding: 4px 8px;
         cursor: pointer;
         opacity: 0.7;
+        transition: all 0.2s ease;
     }}
 
     .copy-btn:hover {{
@@ -165,6 +202,17 @@ st.markdown(
         line-height: 1.7;
         font-size: 1.02rem;
         font-weight: 400;
+        color: #e0e0e0;
+    }}
+
+    /* -------- CHAT INPUT -------- */
+    .stChatInput {{
+        border-color: rgba(0,255,170,0.3) !important;
+    }}
+
+    .stChatInput:focus-within {{
+        border-color: rgba(0,255,170,0.6) !important;
+        box-shadow: 0 0 0 1px rgba(0,255,170,0.3) !important;
     }}
     </style>
 
@@ -209,20 +257,20 @@ AVATARES = {
 # -------------------- CONTEXTO --------------------
 def obtener_contexto_actual():
     ahora = datetime.now()
-    return f"{ahora.strftime('%d/%m/%Y %H:%M')}"
+    return f"Fecha y hora actual: {ahora.strftime('%d/%m/%Y %H:%M')}"
 
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
     return (
         "Sos MangiAI, una IA moderna y profesional creada por Dante Mangiafico. "
         f"{ESTILOS[estilo]} "
-        + obtener_contexto_actual()
+        f"{obtener_contexto_actual()}"
     )
 
 # -------------------- SIDEBAR --------------------
 def configurar_pagina():
     st.sidebar.title("⚙️ Configuración")
-    modelo = st.sidebar.selectbox("Modelo:", MODELOS)
+    modelo = st.sidebar.selectbox("Modelo:", MODELOS, key="modelo_selector")
 
     st.sidebar.markdown("### 💬 Estilo de respuesta")
 
@@ -230,10 +278,12 @@ def configurar_pagina():
         st.session_state.estilo_respuesta = "⚡ Directo"
 
     for estilo in ESTILOS:
-        if st.sidebar.button(estilo, use_container_width=True):
+        if st.sidebar.button(estilo, key=f"estilo_{estilo}", use_container_width=True):
             st.session_state.estilo_respuesta = estilo
 
-    if st.sidebar.button("🧹 Limpiar conversación"):
+    st.sidebar.markdown("---")
+    
+    if st.sidebar.button("🧹 Limpiar conversación", use_container_width=True):
         st.session_state.mensajes = []
         st.rerun()
 
@@ -267,14 +317,12 @@ def mostrar_historial():
             <div class="chat-wrapper">
                 <div class="chat-header">
                     <div class="style-badge">{emoji} {nombre}</div>
-                    <button class="copy-btn"
-                        onclick="navigator.clipboard.writeText(this.dataset.text)">
-                        📋
+                    <button class="copy-btn" 
+                        onclick="navigator.clipboard.writeText(decodeURIComponent('{html.escape(mensaje['content']).replace("'", "\\'")}'))">
+                        📋 Copiar
                     </button>
                 </div>
-                <div class="chat-message" data-text="{texto_seguro}">
-                    {texto_seguro}
-                </div>
+                <div class="chat-message">{texto_seguro}</div>
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -290,7 +338,9 @@ def generar_respuesta(cliente, modelo):
 
     respuesta = cliente.chat.completions.create(
         model=modelo,
-        messages=mensajes
+        messages=mensajes,
+        temperature=0.7,
+        max_tokens=2048
     )
 
     return respuesta.choices[0].message.content
@@ -315,7 +365,7 @@ mensaje_usuario = st.chat_input("Escribí tu mensaje...")
 if mensaje_usuario:
     actualizar_historial("user", mensaje_usuario, "🤔")
 
-    with st.spinner("Analizando..."):
+    with st.spinner("✨ Analizando..."):
         respuesta = generar_respuesta(cliente, modelo)
 
     estilo_actual = st.session_state.estilo_respuesta
