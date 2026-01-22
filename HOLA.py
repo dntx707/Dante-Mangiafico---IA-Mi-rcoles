@@ -28,6 +28,15 @@ st.markdown(
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+    /* -------- FONDO CON DEGRADADO -------- */
+    .stApp {{
+        background: linear-gradient(135deg, 
+            rgba(16, 185, 129, 0.03) 0%,
+            rgba(59, 130, 246, 0.02) 50%,
+            rgba(139, 92, 246, 0.03) 100%
+        );
+    }}
+    
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
         font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
