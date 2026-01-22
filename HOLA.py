@@ -284,6 +284,40 @@ st.markdown(
         right: 10% !important;
         animation: particula2 3s ease-in-out infinite 0.5s !important;
     }}
+
+    /* -------- ANIMACIONES DE MENSAJES DEL CHAT -------- */
+    @keyframes messageSlideIn {{
+        from {{
+            opacity: 0;
+            transform: translateX(-30px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateX(0);
+        }}
+    }}
+
+    @keyframes messageSlideInRight {{
+        from {{
+            opacity: 0;
+            transform: translateX(30px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateX(0);
+        }}
+    }}
+
+    /* Animación para mensajes del usuario */
+    div[data-testid="stChatMessage"] {{
+        animation: messageSlideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }}
+
+    /* Animación para texto de mensajes */
+    div[data-testid="stChatMessage"] p,
+    div[data-testid="stChatMessage"] > div {{
+        animation: fadeInUp 0.5s ease-out 0.1s backwards;
+    }}
     </style>
 
     <img src="data:image/png;base64,{logo_fijo_base64}" class="logo-fixed">
@@ -382,7 +416,14 @@ def mostrar_historial():
         if m["role"] == "assistant":
             emoji, nombre = AVATARES.get(m["estilo"], ("🤖", "MangiAI"))
             texto = html.escape(m["content"])
-            st.markdown(f"**{emoji} {nombre}**\n\n{texto}")
+            # Wrapper con animación para mensajes de IA
+            st.markdown(f"""
+                <div style="animation: messageSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                    <strong>{emoji} {nombre}</strong>
+                    <br><br>
+                    {texto}
+                </div>
+            """, unsafe_allow_html=True)
         else:
             with st.chat_message("user", avatar=m["avatar"]):
                 st.markdown(m["content"])
