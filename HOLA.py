@@ -535,60 +535,40 @@ inicializar_estado()
 cliente = Groq(api_key=st.secrets["CLAVE_API"])
 modelo = configurar_sidebar()
 
-# -------------------- MODAL GENERADOR DE IMÁGENES --------------------
+# -------------------- GENERADOR DE IMÁGENES --------------------
 if st.session_state.get("mostrar_generador", False):
-    st.markdown("""
-        <style>
-        .imagen-modal-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    st.markdown("---")
+    st.markdown("## 🎨 Generador de Imágenes")
     
-    st.markdown('<div class="imagen-modal-container">', unsafe_allow_html=True)
+    prompt_imagen = st.text_area(
+        "Describe la imagen que querés crear:",
+        placeholder="Ej: Un gato astronauta flotando en el espacio con nebulosas de colores...",
+        height=120,
+        key="prompt_img"
+    )
     
-    with st.container():
-        st.markdown("### 🎨 Generar Imagen")
-        
-        prompt_imagen = st.text_area(
-            "Describe la imagen que querés crear:",
-            placeholder="Ej: Un gato astronauta flotando en el espacio con nebulosas de colores...",
-            height=120,
-            key="prompt_img"
-        )
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            if st.button("✨ Generar", use_container_width=True, key="btn_gen"):
-                if prompt_imagen:
-                    with st.spinner("🎨 Creando tu imagen..."):
-                        try:
-                            imagen_url = generar_imagen(prompt_imagen)
-                            if imagen_url:
-                                st.image(imagen_url, caption=prompt_imagen)
-                                st.success("¡Imagen generada con éxito!")
-                        except Exception as e:
-                            st.error(f"Error al generar imagen: {str(e)}")
-                else:
-                    st.warning("Por favor, describe la imagen que querés crear")
-        
-        with col2:
-            if st.button("❌ Cerrar", use_container_width=True, key="btn_close"):
-                st.session_state.mostrar_generador = False
-                st.rerun()
+    col1, col2, col3 = st.columns([2, 2, 1])
     
-    st.markdown('</div>', unsafe_allow_html=True)
+    with col1:
+        if st.button("✨ Generar Imagen", use_container_width=True, key="btn_gen", type="primary"):
+            if prompt_imagen:
+                with st.spinner("🎨 Creando tu imagen..."):
+                    try:
+                        imagen_url = generar_imagen(prompt_imagen)
+                        if imagen_url:
+                            st.image(imagen_url, caption=prompt_imagen, use_column_width=True)
+                            st.success("¡Imagen generada con éxito!")
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+            else:
+                st.warning("Por favor, describe la imagen")
+    
+    with col2:
+        if st.button("❌ Cerrar Generador", use_container_width=True, key="btn_close"):
+            st.session_state.mostrar_generador = False
+            st.rerun()
+    
+    st.markdown("---")
 
 # -------------------- PANTALLA DE BIENVENIDA --------------------
 if st.session_state.mostrar_bienvenida:
@@ -650,4 +630,3 @@ else:
         actualizar_historial("assistant", respuesta, avatar, estilo=estilo_actual)
 
         st.rerun()
-
