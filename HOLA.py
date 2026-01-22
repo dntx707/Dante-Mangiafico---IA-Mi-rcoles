@@ -48,6 +48,16 @@ st.markdown(
         opacity: 0.95;
         pointer-events: none;
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+        animation: rotacionSuave 20s linear infinite;
+    }}
+
+    @keyframes rotacionSuave {{
+        from {{
+            transform: rotate(0deg);
+        }}
+        to {{
+            transform: rotate(360deg);
+        }}
     }}
 
     /* -------- ANIMACIONES -------- */
