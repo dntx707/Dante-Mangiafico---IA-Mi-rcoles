@@ -113,6 +113,15 @@ st.markdown(
         }}
     }}
 
+    @keyframes glowPulse {{
+        0%, 100% {{
+            box-shadow: 0 0 5px rgba(34, 197, 94, 0.2), 0 0 10px rgba(34, 197, 94, 0.1);
+        }}
+        50% {{
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4), 0 0 25px rgba(34, 197, 94, 0.2), 0 0 35px rgba(34, 197, 94, 0.1);
+        }}
+    }}
+
     /* -------- PANTALLA DE BIENVENIDA -------- */
     .welcome-screen {{
         display: flex;
@@ -237,6 +246,18 @@ st.markdown(
         font-weight: 500 !important;
         white-space: nowrap !important;
         padding: 0 16px !important;
+    }}
+
+    /* -------- ANIMACIÓN INPUT CHAT -------- */
+    .stChatInput textarea {{
+        animation: glowPulse 3s ease-in-out infinite !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease !important;
+    }}
+
+    .stChatInput textarea:focus {{
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.5), 0 0 35px rgba(34, 197, 94, 0.3) !important;
+        border-color: rgb(34, 197, 94) !important;
     }}
     </style>
 
