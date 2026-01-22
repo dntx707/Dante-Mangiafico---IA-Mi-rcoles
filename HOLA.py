@@ -5,22 +5,24 @@ import base64
 import uuid
 import html
 
-# -------------------- CONFIG PÁGINA --------------------
+# ==================== CONFIGURACIÓN ====================
 st.set_page_config(
     page_title="MangiAI",
     page_icon="🤖",
     layout="centered"
 )
 
-# -------------------- LOGOS --------------------
+# ==================== FUNCIONES AUXILIARES ====================
 def cargar_logo_base64(path):
+    """Carga una imagen y la convierte a base64"""
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+# ==================== LOGOS ====================
 logo_fijo_base64 = cargar_logo_base64("logomangi.png")
 logo_definitivo_base64 = cargar_logo_base64("logodefinitivo2.png")
 
-# -------------------- ESTILOS GLOBALES --------------------
+# ==================== ESTILOS CSS ====================
 st.markdown(
     f"""
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,17 +30,15 @@ st.markdown(
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+    /* -------- FUENTE GLOBAL -------- */
     html, body, [class*="st-"], div, span, p, h1, h2, h3, h4, h5, h6,
     button, input, textarea {{
         font-family: 'Exo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     }}
 
-    h1 {{
-        font-weight: 900;
-        margin: 0;
-    }}
+    h1 {{ font-weight: 900; margin: 0; }}
 
-    /* -------- LOGO FIJO -------- */
+    /* -------- LOGO FIJO SUPERIOR DERECHO -------- */
     .logo-fixed {{
         position: fixed;
         top: 16px;
@@ -52,133 +52,46 @@ st.markdown(
     }}
 
     @keyframes breathing {{
-        0%, 100% {{
-            transform: scale(1);
-            opacity: 0.95;
-        }}
-        50% {{
-            transform: scale(1.05);
-            opacity: 1;
-        }}
+        0%, 100% {{ transform: scale(1); opacity: 0.95; }}
+        50% {{ transform: scale(1.05); opacity: 1; }}
     }}
 
     /* -------- ANIMACIONES -------- */
     @keyframes flotar {{
-        0%, 100% {{
-            transform: translateY(0px);
-        }}
-        50% {{
-            transform: translateY(-12px);
-        }}
+        0%, 100% {{ transform: translateY(0px); }}
+        50% {{ transform: translateY(-12px); }}
     }}
 
     @keyframes brillo {{
-        0%, 100% {{
-            filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3));
-        }}
-        50% {{
-            filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.6));
-        }}
+        0%, 100% {{ filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3)); }}
+        50% {{ filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.6)); }}
     }}
 
     @keyframes fadeInUp {{
-        from {{
-            opacity: 0;
-            transform: translateY(40px) scale(0.95);
-        }}
-        to {{
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }}
-    }}
-
-    @keyframes fadeOutDown {{
-        from {{
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }}
-        to {{
-            opacity: 0;
-            transform: translateY(-60px) scale(0.9);
-        }}
+        from {{ opacity: 0; transform: translateY(40px) scale(0.95); }}
+        to {{ opacity: 1; transform: translateY(0) scale(1); }}
     }}
 
     @keyframes slideInFromBottom {{
-        from {{
-            opacity: 0;
-            transform: translateY(100px);
-        }}
-        to {{
-            opacity: 1;
-            transform: translateY(0);
-        }}
+        from {{ opacity: 0; transform: translateY(100px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
     }}
 
     @keyframes zoomIn {{
-        from {{
-            opacity: 0;
-            transform: scale(0.8);
-        }}
-        to {{
-            opacity: 1;
-            transform: scale(1);
-        }}
+        from {{ opacity: 0; transform: scale(0.8); }}
+        to {{ opacity: 1; transform: scale(1); }}
     }}
 
     @keyframes particula1 {{
-        0% {{
-            transform: translate(0, 0) scale(0);
-            opacity: 0;
-        }}
-        50% {{
-            opacity: 0.6;
-        }}
-        100% {{
-            transform: translate(-30px, -40px) scale(1);
-            opacity: 0;
-        }}
+        0% {{ transform: translate(0, 0) scale(0); opacity: 0; }}
+        50% {{ opacity: 0.6; }}
+        100% {{ transform: translate(-30px, -40px) scale(1); opacity: 0; }}
     }}
 
     @keyframes particula2 {{
-        0% {{
-            transform: translate(0, 0) scale(0);
-            opacity: 0;
-        }}
-        50% {{
-            opacity: 0.6;
-        }}
-        100% {{
-            transform: translate(30px, -45px) scale(1);
-            opacity: 0;
-        }}
-    }}
-
-    @keyframes particula3 {{
-        0% {{
-            transform: translate(0, 0) scale(0);
-            opacity: 0;
-        }}
-        50% {{
-            opacity: 0.6;
-        }}
-        100% {{
-            transform: translate(-15px, -50px) scale(1);
-            opacity: 0;
-        }}
-    }}
-
-    @keyframes particula4 {{
-        0% {{
-            transform: translate(0, 0) scale(0);
-            opacity: 0;
-        }}
-        50% {{
-            opacity: 0.6;
-        }}
-        100% {{
-            transform: translate(25px, -35px) scale(1);
-            opacity: 0;
-        }}
+        0% {{ transform: translate(0, 0) scale(0); opacity: 0; }}
+        50% {{ opacity: 0.6; }}
+        100% {{ transform: translate(30px, -45px) scale(1); opacity: 0; }}
     }}
 
     /* -------- PANTALLA DE BIENVENIDA -------- */
@@ -238,7 +151,7 @@ st.markdown(
         box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35) !important;
     }}
 
-    /* -------- HEADER CHAT -------- */
+    /* -------- HEADER DEL CHAT -------- */
     .header-logo {{
         display: flex;
         flex-direction: column;
@@ -308,12 +221,11 @@ st.markdown(
         padding: 0 16px !important;
     }}
 
-    /* -------- SCROLLBAR SOLO CUANDO HAY OVERFLOW -------- */
+    /* -------- SCROLLBAR PERSONALIZADO -------- */
     .main, [data-testid="stAppViewContainer"], section[data-testid="stMainBlockContainer"] {{
         overflow-y: auto !important;
     }}
 
-    /* Ocultar scrollbar por defecto */
     .main::-webkit-scrollbar, 
     [data-testid="stAppViewContainer"]::-webkit-scrollbar,
     section[data-testid="stMainBlockContainer"]::-webkit-scrollbar {{
@@ -339,13 +251,12 @@ st.markdown(
         background: rgba(34, 197, 94, 0.5) !important;
     }}
 
-    /* Firefox */
     .main, [data-testid="stAppViewContainer"], section[data-testid="stMainBlockContainer"] {{
         scrollbar-width: thin !important;
         scrollbar-color: rgba(34, 197, 94, 0.3) transparent !important;
     }}
 
-    /* -------- PARTÍCULAS FLOTANTES INPUT -------- */
+    /* -------- PARTÍCULAS FLOTANTES EN INPUT -------- */
     .stChatInput {{
         position: relative !important;
     }}
@@ -373,34 +284,6 @@ st.markdown(
         right: 10% !important;
         animation: particula2 3s ease-in-out infinite 0.5s !important;
     }}
-
-    @keyframes particula5 {{
-        0% {{
-            transform: translate(0, 0) scale(0);
-            opacity: 0;
-        }}
-        50% {{
-            opacity: 0.5;
-        }}
-        100% {{
-            transform: translate(0, -55px) scale(1);
-            opacity: 0;
-        }}
-    }}
-
-    @keyframes particula6 {{
-        0% {{
-            transform: translate(0, 0) scale(0);
-            opacity: 0;
-        }}
-        50% {{
-            opacity: 0.5;
-        }}
-        100% {{
-            transform: translate(-40px, -30px) scale(1);
-            opacity: 0;
-        }}
-    }}
     </style>
 
     <img src="data:image/png;base64,{logo_fijo_base64}" class="logo-fixed">
@@ -408,7 +291,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# -------------------- CONFIGURACIÓN --------------------
+# ==================== CONFIGURACIÓN DE MODELOS Y ESTILOS ====================
 MODELOS = [
     "llama-3.1-8b-instant",
     "llama-3.3-70b-versatile",
@@ -436,8 +319,9 @@ AVATARES = {
     "💻 Código": ("💻", "Código")
 }
 
-# -------------------- FUNCIONES --------------------
+# ==================== FUNCIONES ====================
 def construir_system_prompt():
+    """Construye el prompt del sistema basado en el estilo seleccionado"""
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
     timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
     return (
@@ -446,6 +330,7 @@ def construir_system_prompt():
     )
 
 def configurar_sidebar():
+    """Configura el sidebar con modelos, estilos y herramientas"""
     st.sidebar.title("⚙️ Configuración")
     modelo = st.sidebar.selectbox("Modelo:", MODELOS)
 
@@ -473,6 +358,7 @@ def configurar_sidebar():
     return modelo
 
 def inicializar_estado():
+    """Inicializa las variables de sesión"""
     if "mensajes" not in st.session_state:
         st.session_state.mensajes = []
     if "mostrar_bienvenida" not in st.session_state:
@@ -481,6 +367,7 @@ def inicializar_estado():
         st.session_state.mostrar_generador = False
 
 def actualizar_historial(rol, contenido, avatar, estilo=None):
+    """Agrega un mensaje al historial"""
     st.session_state.mensajes.append({
         "id": str(uuid.uuid4()),
         "role": rol,
@@ -490,6 +377,7 @@ def actualizar_historial(rol, contenido, avatar, estilo=None):
     })
 
 def mostrar_historial():
+    """Muestra el historial de mensajes"""
     for m in st.session_state.mensajes:
         if m["role"] == "assistant":
             emoji, nombre = AVATARES.get(m["estilo"], ("🤖", "MangiAI"))
@@ -500,6 +388,7 @@ def mostrar_historial():
                 st.markdown(m["content"])
 
 def generar_respuesta(cliente, modelo):
+    """Genera una respuesta usando Groq"""
     mensajes = [{"role": "system", "content": construir_system_prompt()}] + [
         {"role": m["role"], "content": m["content"]}
         for m in st.session_state.mensajes
@@ -530,12 +419,12 @@ def generar_imagen(prompt):
         st.error(f"Error: {str(e)}")
         return None
 
-# -------------------- APP PRINCIPAL --------------------
+# ==================== APLICACIÓN PRINCIPAL ====================
 inicializar_estado()
 cliente = Groq(api_key=st.secrets["CLAVE_API"])
 modelo = configurar_sidebar()
 
-# -------------------- GENERADOR DE IMÁGENES --------------------
+# ==================== GENERADOR DE IMÁGENES ====================
 if st.session_state.get("mostrar_generador", False):
     st.markdown("---")
     st.markdown("## 🎨 Generador de Imágenes")
@@ -570,7 +459,7 @@ if st.session_state.get("mostrar_generador", False):
     
     st.markdown("---")
 
-# -------------------- PANTALLA DE BIENVENIDA --------------------
+# ==================== PANTALLA DE BIENVENIDA ====================
 if st.session_state.mostrar_bienvenida:
     st.markdown(
         f"""
@@ -591,7 +480,7 @@ if st.session_state.mostrar_bienvenida:
             st.session_state.mostrar_bienvenida = False
             st.rerun()
 
-# -------------------- PANTALLA DE CHAT --------------------
+# ==================== PANTALLA DE CHAT ====================
 else:
     st.markdown(
         f"""
