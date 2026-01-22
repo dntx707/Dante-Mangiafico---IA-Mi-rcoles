@@ -295,17 +295,41 @@ st.markdown(
         padding: 0 16px !important;
     }}
 
-    /* -------- OCULTAR SCROLLBAR -------- */
+    /* -------- SCROLLBAR SOLO CUANDO HAY OVERFLOW -------- */
     .main, [data-testid="stAppViewContainer"], section[data-testid="stMainBlockContainer"] {{
         overflow-y: auto !important;
-        scrollbar-width: none !important; /* Firefox */
-        -ms-overflow-style: none !important; /* IE/Edge */
     }}
 
+    /* Ocultar scrollbar por defecto */
     .main::-webkit-scrollbar, 
     [data-testid="stAppViewContainer"]::-webkit-scrollbar,
     section[data-testid="stMainBlockContainer"]::-webkit-scrollbar {{
-        display: none !important; /* Chrome/Safari */
+        width: 8px !important;
+    }}
+
+    .main::-webkit-scrollbar-track,
+    [data-testid="stAppViewContainer"]::-webkit-scrollbar-track,
+    section[data-testid="stMainBlockContainer"]::-webkit-scrollbar-track {{
+        background: transparent !important;
+    }}
+
+    .main::-webkit-scrollbar-thumb,
+    [data-testid="stAppViewContainer"]::-webkit-scrollbar-thumb,
+    section[data-testid="stMainBlockContainer"]::-webkit-scrollbar-thumb {{
+        background: rgba(34, 197, 94, 0.3) !important;
+        border-radius: 10px !important;
+    }}
+
+    .main::-webkit-scrollbar-thumb:hover,
+    [data-testid="stAppViewContainer"]::-webkit-scrollbar-thumb:hover,
+    section[data-testid="stMainBlockContainer"]::-webkit-scrollbar-thumb:hover {{
+        background: rgba(34, 197, 94, 0.5) !important;
+    }}
+
+    /* Firefox */
+    .main, [data-testid="stAppViewContainer"], section[data-testid="stMainBlockContainer"] {{
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(34, 197, 94, 0.3) transparent !important;
     }}
 
     /* -------- PARTÍCULAS FLOTANTES INPUT -------- */
