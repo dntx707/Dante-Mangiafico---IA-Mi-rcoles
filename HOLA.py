@@ -346,7 +346,7 @@ def configurar_sidebar():
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🎨 Herramientas")
     
-    if st.sidebar.button("✨ Mejorar Prompts", use_container_width=True, key="gen_img", type="secondary"):
+    if st.sidebar.button("🧠 Prompt Genius", use_container_width=True, key="gen_img", type="secondary"):
         st.session_state.mostrar_generador = True
         st.rerun()
 
@@ -455,14 +455,14 @@ modelo = configurar_sidebar()
 # ==================== GENERADOR DE IMÁGENES ====================
 if st.session_state.get("mostrar_generador", False):
     st.markdown("---")
-    st.markdown("## ✨ Mejorador de Prompts")
+    st.markdown("## 🧠 Prompt Genius")
     
     # Inicializar estado del prompt si no existe
     if "prompt_mejorado" not in st.session_state:
         st.session_state.prompt_mejorado = ""
     
     prompt_imagen = st.text_area(
-        "Describe la imagen que querés crear:",
+        "Describe tu idea:",
         placeholder="Ej: Un gato astronauta en el espacio...",
         height=100,
         key="prompt_img"
@@ -471,14 +471,14 @@ if st.session_state.get("mostrar_generador", False):
     col1, col2 = st.columns([2, 2])
     
     with col1:
-        if st.button("✨ Mejorar Prompt con IA", use_container_width=True, key="btn_enhance", type="primary"):
+        if st.button("🧠 Potenciar con IA", use_container_width=True, key="btn_enhance", type="primary"):
             if prompt_imagen:
-                with st.spinner("🔮 Mejorando tu prompt..."):
+                with st.spinner("🧠 Potenciando tu idea..."):
                     prompt_mejorado = mejorar_prompt(prompt_imagen, cliente, modelo)
                     st.session_state.prompt_mejorado = prompt_mejorado
                     st.rerun()
             else:
-                st.warning("Escribí algo primero para mejorar")
+                st.warning("Escribí algo primero")
     
     with col2:
         if st.button("❌ Cerrar", use_container_width=True, key="btn_close"):
@@ -488,7 +488,7 @@ if st.session_state.get("mostrar_generador", False):
     
     # Mostrar el prompt mejorado directamente si existe
     if st.session_state.prompt_mejorado:
-        st.markdown("### 📝 Prompt Mejorado:")
+        st.markdown("### 💎 Prompt Potenciado:")
         st.info(st.session_state.prompt_mejorado)
         
         # Botón para copiar
