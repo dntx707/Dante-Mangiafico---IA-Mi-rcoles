@@ -539,70 +539,38 @@ modelo = configurar_sidebar()
 if st.session_state.get("mostrar_generador", False):
     st.markdown("""
         <style>
-        .modal-overlay {
+        .imagen-modal-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 9998;
-            animation: fadeIn 0.3s ease-out;
-        }
-        .modal-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            padding: 40px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
             z-index: 9999;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
-            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -40%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-        .modal-title {
-            font-size: 2rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         </style>
-        <div class="modal-overlay"></div>
     """, unsafe_allow_html=True)
     
+    st.markdown('<div class="imagen-modal-container">', unsafe_allow_html=True)
+    
     with st.container():
-        st.markdown('<div class="modal-content">', unsafe_allow_html=True)
-        st.markdown('<div class="modal-title">🎨 Generar Imagen</div>', unsafe_allow_html=True)
+        st.markdown("### 🎨 Generar Imagen")
         
         prompt_imagen = st.text_area(
             "Describe la imagen que querés crear:",
             placeholder="Ej: Un gato astronauta flotando en el espacio con nebulosas de colores...",
-            height=120
+            height=120,
+            key="prompt_img"
         )
         
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("✨ Generar", use_container_width=True):
+            if st.button("✨ Generar", use_container_width=True, key="btn_gen"):
                 if prompt_imagen:
                     with st.spinner("🎨 Creando tu imagen..."):
                         try:
@@ -616,11 +584,11 @@ if st.session_state.get("mostrar_generador", False):
                     st.warning("Por favor, describe la imagen que querés crear")
         
         with col2:
-            if st.button("❌ Cerrar", use_container_width=True):
+            if st.button("❌ Cerrar", use_container_width=True, key="btn_close"):
                 st.session_state.mostrar_generador = False
                 st.rerun()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # -------------------- PANTALLA DE BIENVENIDA --------------------
 if st.session_state.mostrar_bienvenida:
@@ -682,3 +650,4 @@ else:
         actualizar_historial("assistant", respuesta, avatar, estilo=estilo_actual)
 
         st.rerun()
+
