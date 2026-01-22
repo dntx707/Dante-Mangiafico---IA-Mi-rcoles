@@ -4,6 +4,7 @@ from datetime import datetime
 import base64
 import uuid
 import html
+import time
 
 # ==================== CONFIGURACIÓN ====================
 st.set_page_config(
@@ -37,6 +38,142 @@ st.markdown(
     }}
 
     h1 {{ font-weight: 900; margin: 0; }}
+
+    /* -------- PANTALLA DE CARGA INICIAL -------- */
+    .loading-overlay {{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        animation: fadeOut 0.8s ease-out 2.5s forwards;
+    }}
+
+    @keyframes fadeOut {{
+        to {{
+            opacity: 0;
+            visibility: hidden;
+        }}
+    }}
+
+    .loading-logo {{
+        width: 180px;
+        height: 180px;
+        animation: pulseGlow 2s ease-in-out infinite, rotateIn 1s ease-out;
+        filter: drop-shadow(0 0 40px rgba(34, 197, 94, 0.8));
+        margin-bottom: 30px;
+    }}
+
+    @keyframes pulseGlow {{
+        0%, 100% {{
+            transform: scale(1);
+            filter: drop-shadow(0 0 40px rgba(34, 197, 94, 0.8));
+        }}
+        50% {{
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 60px rgba(34, 197, 94, 1));
+        }}
+    }}
+
+    @keyframes rotateIn {{
+        from {{
+            transform: rotate(-180deg) scale(0);
+            opacity: 0;
+        }}
+        to {{
+            transform: rotate(0deg) scale(1);
+            opacity: 1;
+        }}
+    }}
+
+    .loading-text {{
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 20px;
+        animation: fadeInText 0.8s ease-out 0.5s backwards;
+        letter-spacing: 2px;
+    }}
+
+    @keyframes fadeInText {{
+        from {{
+            opacity: 0;
+            transform: translateY(20px);
+        }}
+        to {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
+    }}
+
+    .loading-bar {{
+        width: 300px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        animation: fadeInText 0.8s ease-out 0.7s backwards;
+    }}
+
+    .loading-bar-fill {{
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #10b981, #22c55e);
+        background-size: 200% 100%;
+        animation: loadingProgress 2s ease-out, shimmer 1.5s ease-in-out infinite;
+        border-radius: 10px;
+    }}
+
+    @keyframes loadingProgress {{
+        from {{ width: 0%; }}
+        to {{ width: 100%; }}
+    }}
+
+    @keyframes shimmer {{
+        0% {{ background-position: 200% 0; }}
+        100% {{ background-position: -200% 0; }}
+    }}
+
+    /* Partículas flotantes de fondo */
+    .particle {{
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: rgba(34, 197, 94, 0.6);
+        border-radius: 50%;
+        animation: floatParticle 8s ease-in-out infinite;
+    }}
+
+    @keyframes floatParticle {{
+        0%, 100% {{
+            transform: translate(0, 0) scale(1);
+            opacity: 0;
+        }}
+        10% {{
+            opacity: 1;
+        }}
+        90% {{
+            opacity: 1;
+        }}
+        100% {{
+            transform: translate(var(--tx), var(--ty)) scale(0);
+            opacity: 0;
+        }}
+    }}
+
+    .particle:nth-child(1) {{ left: 10%; top: 20%; --tx: 50px; --ty: -100px; animation-delay: 0s; }}
+    .particle:nth-child(2) {{ left: 20%; top: 80%; --tx: -30px; --ty: -120px; animation-delay: 0.5s; }}
+    .particle:nth-child(3) {{ left: 80%; top: 30%; --tx: -60px; --ty: -80px; animation-delay: 1s; }}
+    .particle:nth-child(4) {{ left: 70%; top: 70%; --tx: 40px; --ty: -110px; animation-delay: 1.5s; }}
+    .particle:nth-child(5) {{ left: 50%; top: 50%; --tx: -50px; --ty: -90px; animation-delay: 2s; }}
+    .particle:nth-child(6) {{ left: 30%; top: 40%; --tx: 70px; --ty: -130px; animation-delay: 2.5s; }}
+    .particle:nth-child(7) {{ left: 60%; top: 60%; --tx: -40px; --ty: -100px; animation-delay: 3s; }}
+    .particle:nth-child(8) {{ left: 15%; top: 50%; --tx: 60px; --ty: -95px; animation-delay: 3.5s; }}
 
     /* -------- LOGO FIJO SUPERIOR DERECHO -------- */
     .logo-fixed {{
@@ -399,6 +536,8 @@ def inicializar_estado():
         st.session_state.mostrar_bienvenida = True
     if "mostrar_generador" not in st.session_state:
         st.session_state.mostrar_generador = False
+    if "app_cargada" not in st.session_state:
+        st.session_state.app_cargada = False
 
 def actualizar_historial(rol, contenido, avatar, estilo=None):
     """Agrega un mensaje al historial"""
@@ -416,7 +555,6 @@ def mostrar_historial():
         if m["role"] == "assistant":
             emoji, nombre = AVATARES.get(m["estilo"], ("🤖", "MangiAI"))
             texto = html.escape(m["content"])
-            # Wrapper con animación para mensajes de IA
             st.markdown(f"""
                 <div style="animation: messageSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
                     <strong>{emoji} {nombre}</strong>
@@ -441,24 +579,6 @@ def generar_respuesta(cliente, modelo):
     )
 
     return respuesta.choices[0].message.content
-
-def generar_imagen(prompt):
-    """Genera una imagen usando Replicate"""
-    try:
-        import replicate
-        
-        output = replicate.run(
-            "black-forest-labs/flux-schnell",
-            input={"prompt": prompt}
-        )
-        
-        return output[0] if output else None
-    except ImportError:
-        st.error("⚠️ Necesitás instalar replicate: `pip install replicate`")
-        return None
-    except Exception as e:
-        st.error(f"Error: {str(e)}")
-        return None
 
 def mejorar_prompt(prompt_basico, cliente, modelo):
     """Mejora un prompt básico convirtiéndolo en uno detallado para generación de imágenes"""
@@ -490,6 +610,42 @@ Respondé SOLO con el prompt mejorado, sin explicaciones adicionales."""
 
 # ==================== APLICACIÓN PRINCIPAL ====================
 inicializar_estado()
+
+# ==================== PANTALLA DE CARGA INICIAL ====================
+if not st.session_state.app_cargada:
+    st.markdown(
+        f"""
+        <div class="loading-overlay">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            
+            <img src="data:image/png;base64,{logo_definitivo_base64}" class="loading-logo">
+            <div class="loading-text">MANGIAI</div>
+            <div class="loading-bar">
+                <div class="loading-bar-fill"></div>
+            </div>
+        </div>
+        
+        <script>
+            setTimeout(function() {{
+                window.parent.postMessage({{type: 'streamlit:setComponentValue', value: true}}, '*');
+            }}, 3000);
+        </script>
+        """,
+        unsafe_allow_html=True
+    )
+    
+    # Esperar 3 segundos y marcar como cargada
+    time.sleep(3)
+    st.session_state.app_cargada = True
+    st.rerun()
+
 cliente = Groq(api_key=st.secrets["CLAVE_API"])
 modelo = configurar_sidebar()
 
@@ -498,7 +654,6 @@ if st.session_state.get("mostrar_generador", False):
     st.markdown("---")
     st.markdown("## 🧠 Prompt Genius")
     
-    # Inicializar estado del prompt si no existe
     if "prompt_mejorado" not in st.session_state:
         st.session_state.prompt_mejorado = ""
     
@@ -527,12 +682,10 @@ if st.session_state.get("mostrar_generador", False):
             st.session_state.prompt_mejorado = ""
             st.rerun()
     
-    # Mostrar el prompt mejorado directamente si existe
     if st.session_state.prompt_mejorado:
         st.markdown("### 💎 Prompt Potenciado:")
         st.info(st.session_state.prompt_mejorado)
         
-        # Botón para copiar
         if st.button("📋 Copiar Prompt", use_container_width=False):
             st.success("¡Copiá el texto de arriba!")
     
@@ -598,6 +751,3 @@ else:
         actualizar_historial("assistant", respuesta, avatar, estilo=estilo_actual)
 
         st.rerun()
-
-
-
