@@ -175,32 +175,32 @@ st.markdown(
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 70vh;
+        height: 72vh;
         text-align: center;
         animation: fadeInUp 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         padding: 20px;
     }}
 
     .welcome-screen img {{
-        width: 120px;
-        height: 120px;
-        margin-bottom: 24px;
+        width: 130px;
+        height: 130px;
+        margin-bottom: 28px;
         animation: flotar 3s ease-in-out infinite, brillo 3s ease-in-out infinite, zoomIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
     .welcome-screen h1 {{
-        font-size: 2.8rem;
+        font-size: 3rem;
         font-weight: 900;
         letter-spacing: -0.02em;
         line-height: 1.15;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
         animation: fadeInUp 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
     }}
 
     .welcome-subtitle {{
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         opacity: 0.75;
-        margin-bottom: 36px;
+        margin-bottom: 40px;
         max-width: 500px;
         animation: fadeInUp 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
     }}
@@ -231,21 +231,21 @@ st.markdown(
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
-        margin-top: 20px;
-        margin-bottom: 30px;
+        gap: 12px;
+        margin-top: 24px;
+        margin-bottom: 34px;
         text-align: center;
         animation: slideInFromBottom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
     .header-logo img {{
-        width: 90px;
-        height: 90px;
+        width: 100px;
+        height: 100px;
         animation: flotar 3s ease-in-out infinite, brillo 3s ease-in-out infinite, zoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
 
     .header-logo h1 {{
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         font-weight: 900;
         letter-spacing: -0.02em;
         line-height: 1.15;
@@ -253,7 +253,7 @@ st.markdown(
     }}
 
     .header-subtitle {{
-        font-size: 0.95rem;
+        font-size: 1rem;
         opacity: 0.75;
         margin-top: -4px;
         animation: fadeInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
@@ -265,20 +265,20 @@ st.markdown(
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 35vh;
+        height: 40vh;
         text-align: center;
         opacity: 0.95;
         animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
     }}
 
     .empty-title {{
-        font-size: 2rem;
+        font-size: 2.15rem;
         font-weight: 800;
         animation: zoomIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
     }}
 
     .empty-subtitle {{
-        font-size: 1rem;
+        font-size: 1.05rem;
         opacity: 0.75;
         animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
     }}
