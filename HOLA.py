@@ -50,6 +50,25 @@ st.markdown(
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
     }}
 
+    /* -------- ANIMACIÓN LOGO PRINCIPAL -------- */
+    @keyframes flotar {{
+        0%, 100% {{
+            transform: translateY(0px);
+        }}
+        50% {{
+            transform: translateY(-12px);
+        }}
+    }}
+
+    @keyframes brillo {{
+        0%, 100% {{
+            filter: drop-shadow(0 0 8px rgba(147, 51, 234, 0.3));
+        }}
+        50% {{
+            filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.6));
+        }}
+    }}
+
     /* -------- HEADER -------- */
     .header-logo {{
         display: flex;
@@ -64,6 +83,7 @@ st.markdown(
     .header-logo img {{
         width: 118px;
         height: 118px;
+        animation: flotar 3s ease-in-out infinite, brillo 3s ease-in-out infinite;
     }}
 
     .header-logo h1 {{
@@ -120,14 +140,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# -------------------- MODELOS --------------------
+# -------------------- CONFIGURACIÓN --------------------
 MODELOS = [
     "llama-3.1-8b-instant",
     "llama-3.3-70b-versatile",
     "deepseek-r1-distill-llama-70b"
 ]
 
-# -------------------- ESTILOS --------------------
 ESTILOS = {
     "⚡ Directo": "Respondé de forma breve, clara y sin rodeos.",
     "📖 Explicativo": "Respondé paso a paso, con contexto y ejemplos claros.",
@@ -149,19 +168,15 @@ AVATARES = {
     "💻 Código": ("💻", "Código")
 }
 
-# -------------------- CONTEXTO --------------------
-def obtener_contexto_actual():
-    return datetime.now().strftime("%d/%m/%Y %H:%M")
-
+# -------------------- FUNCIONES --------------------
 def construir_system_prompt():
     estilo = st.session_state.get("estilo_respuesta", "⚡ Directo")
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
     return (
-        "MangiAI, una IA moderna y profesional creada por Dante Mangiafico. "
-        f"{ESTILOS[estilo]} "
-        + obtener_contexto_actual()
+        f"MangiAI, una IA moderna y profesional creada por Dante Mangiafico. "
+        f"{ESTILOS[estilo]} {timestamp}"
     )
 
-# -------------------- SIDEBAR --------------------
 def configurar_sidebar():
     st.sidebar.title("⚙️ Configuración")
     modelo = st.sidebar.selectbox("Modelo:", MODELOS)
@@ -181,11 +196,6 @@ def configurar_sidebar():
 
     return modelo
 
-# -------------------- GROQ --------------------
-def crear_cliente_groq():
-    return Groq(api_key=st.secrets["CLAVE_API"])
-
-# -------------------- ESTADO --------------------
 def inicializar_estado():
     if "mensajes" not in st.session_state:
         st.session_state.mensajes = []
@@ -209,23 +219,22 @@ def mostrar_historial():
             with st.chat_message("user", avatar=m["avatar"]):
                 st.markdown(m["content"])
 
-# -------------------- RESPUESTA IA --------------------
 def generar_respuesta(cliente, modelo):
     mensajes = [{"role": "system", "content": construir_system_prompt()}] + [
         {"role": m["role"], "content": m["content"]}
         for m in st.session_state.mensajes
     ]
 
-    r = cliente.chat.completions.create(
+    respuesta = cliente.chat.completions.create(
         model=modelo,
         messages=mensajes
     )
 
-    return r.choices[0].message.content
+    return respuesta.choices[0].message.content
 
-# -------------------- APP --------------------
+# -------------------- APP PRINCIPAL --------------------
 inicializar_estado()
-cliente = crear_cliente_groq()
+cliente = Groq(api_key=st.secrets["CLAVE_API"])
 modelo = configurar_sidebar()
 
 if not st.session_state.mensajes:
@@ -247,14 +256,8 @@ if mensaje_usuario:
         respuesta = generar_respuesta(cliente, modelo)
 
     estilo_actual = st.session_state.estilo_respuesta
-    avatar = AVATARES.get(estilo_actual, ("🤖", ""))[0]
+    avatar = AVATARES[estilo_actual][0]
 
-    actualizar_historial(
-        "assistant",
-        respuesta,
-        avatar,
-        estilo=estilo_actual
-    )
+    actualizar_historial("assistant", respuesta, avatar, estilo=estilo_actual)
 
     st.rerun()
-
