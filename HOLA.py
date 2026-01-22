@@ -185,6 +185,19 @@ st.markdown(
         font-size: 1.05rem;
         opacity: 0.75;
     }}
+
+    /* -------- BOTONES DE ESTILO UNIFORMES -------- */
+    .stSidebar div[data-testid="stButton"] button {{
+        height: 48px !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+        padding: 0 16px !important;
+    }}
     </style>
 
     <img src="data:image/png;base64,{logo_fijo_base64}" class="logo-fixed">
@@ -309,7 +322,7 @@ if st.session_state.mostrar_bienvenida:
     
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        if st.button("Comenzar ✨", use_container_width=True):
+        if st.button("Comenzar", use_container_width=True):
             st.session_state.mostrar_bienvenida = False
             st.rerun()
 
