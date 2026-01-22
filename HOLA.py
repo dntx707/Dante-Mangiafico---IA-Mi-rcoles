@@ -4,7 +4,6 @@ from datetime import datetime
 import base64
 import uuid
 import html
-import replicate
 
 # -------------------- CONFIG PÁGINA --------------------
 st.set_page_config(
@@ -515,14 +514,21 @@ def generar_respuesta(cliente, modelo):
 
 def generar_imagen(prompt):
     """Genera una imagen usando Replicate"""
-    import replicate
-    
-    output = replicate.run(
-        "black-forest-labs/flux-schnell",
-        input={"prompt": prompt}
-    )
-    
-    return output[0] if output else None
+    try:
+        import replicate
+        
+        output = replicate.run(
+            "black-forest-labs/flux-schnell",
+            input={"prompt": prompt}
+        )
+        
+        return output[0] if output else None
+    except ImportError:
+        st.error("⚠️ Necesitás instalar replicate: `pip install replicate`")
+        return None
+    except Exception as e:
+        st.error(f"Error: {str(e)}")
+        return None
 
 # -------------------- APP PRINCIPAL --------------------
 inicializar_estado()
